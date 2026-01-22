@@ -355,7 +355,7 @@ def dataframe_upload():
 
     total_msgs = data_frames[0].groupby(["first_name", "last_name"]).size().reset_index(name="total_messages")
     
-    avg_daily_msgs = data_frames[0].groupby(["first_name", "last_name", "year", "month", "day"]).size().groupby(["first_name", "last_name"]).mean().reset_index(name="average_daily_messages")
+    avg_daily_msgs = data_frames[0].groupby(["first_name", "last_name", "year", "month", "day"]).size().groupby(["first_name", "last_name"]).mean().reset_index(name="average_messages_per_active_day")
    
     most_common_word = data_frames[2].sort_values("count", ascending=False).groupby(["first_name", "last_name"]).head(1)[["first_name", "last_name", "word"]].rename(columns={"word":"favorite_word"})
    
@@ -471,10 +471,9 @@ with tab2:
 
     if (st.session_state["status"] == 0 or st.session_state["status"] == 1):
 
-        st.text("Scroll to view all data tables.")
-
-        for df in st.session_state.get("data_frames"):
-            st.dataframe(df)
+        for i in range(len(st.session_state.get("data_frames"))):
+            st.text(all_tables[i].replace("_", " ").upper())
+            st.dataframe(st.session_state.get("data_frames")[i])
     else:
         st.info("No data uploaded! Visit the upload tab to submit chat data.")
 
@@ -483,11 +482,17 @@ with tab3:
 
     if (st.session_state["status"] == 0 or st.session_state["status"] == 1):
 
-        st.text("Scroll to view all graphs.")
-        
-        st.bar_chart(st.session_state.get("data_frames")[3], x = "first_name", y = "total_messages")
+        st.text("Total Message Count by Member")
+        st.bar_chart(st.session_state.get("data_frames")[3], x = "first_name", y = "total_messages", x_label = "Name", y_label = "Message Count")
 
-        st.line_chart(st.session_state.get("data_frames")[4], y = "message_count")
+        st.text("Average Daily Activity by Member")
+        st.bar_chart(st.session_state.get("data_frames")[3], x = "first_name", y = "average_messages_per_active_day", x_label = "Name", y_label = "Average Messages (Per Active Day)")
+
+        st.text("Chat Activity Over Time")
+        st.line_chart(st.session_state.get("data_frames")[4], y = "message_count", x_label = "Day", y_label = "Message Count")
+
+        st.text("Frequency of Most Common Words")
+        st.bar_chart(st.session_state.get("data_frames")[2].groupby("word", as_index = False)["count"].sum().sort_values("count", ascending = False).head(25), x = "word", y = "count", x_label = "Word", y_label = "Count")
 
     else:
         st.info("No data uploaded! Visit the upload tab to submit chat data.")
