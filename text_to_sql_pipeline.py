@@ -404,22 +404,6 @@ def dataframe_upload():
 st.title("WhatsApp Database Creator")
 st.subheader("Store, Search, and Visualize Any WhatsApp Chat")
 
-st.set_page_config(page_title = "WhatsApp Database Creator", layout = "centered",)
-
-st.markdown("""
-<style>
-[data-testid="stHeader"],
-[data-testid="stToolbar"],
-header {
-    display: none !important;
-}
-
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-</style>
-""", unsafe_allow_html=True)
-
-
 tab1, tab2, tab3, tab4 = st.tabs(["Upload Data", "Tables", "Graphs", "Advanced Chat Search"])
 
 if 'status' not in st.session_state:
@@ -587,3 +571,4 @@ with tab4:
 
     else:
         st.info("No data uploaded! Visit the upload tab to submit chat data.")
+
