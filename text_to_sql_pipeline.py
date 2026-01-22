@@ -400,6 +400,11 @@ def dataframe_upload():
 
 # ------------------------------------- USER INTERFACE, GRAPHING, AND SEARCHING WITH STREAMLIT AND PANDAS ---------------------------------------
 
+st.set_page_config(
+    page_title="WhatsApp Database Creator",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
 st.title("WhatsApp Database Creator")
 st.subheader("Store, Search, and Visualize Any WhatsApp Chat")
